@@ -1,0 +1,32 @@
+@import "src/assets/style";
+.menu{
+  display: flex;
+  padding: 2em;
+  margin: 0;
+  font-size: 1rem;
+  gap: 1rem;
+  line-height: 1;
+  flex-direction: column;
+  background-color: $white;
+  border-right: 1px solid $gray;
+
+  &__item {
+    display: flex;
+    width: auto;
+    align-items: center;
+    padding: 0.5rem;
+    text-decoration: none;
+    color: $main_blue;
+    cursor: pointer;
+    img{
+      margin-right: 1em;
+    }
+    &:hover:not(.list__item--active) {
+      color: #5a30ec;
+    }
+    &.active{
+      background-color: transparent;
+      border-bottom:1px solid $main_blue;
+    }
+  }
+}

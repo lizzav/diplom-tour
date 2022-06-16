@@ -1,0 +1,23 @@
+@import "src/assets/style";
+
+.travels{
+  &__header{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2em;
+  }
+  &__item{
+    margin-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid $gray;
+    h3{
+      cursor: pointer;
+    }
+    .img-icon{
+      margin-left: 1rem;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+@import "src/assets/style";
+
+.blue-button{
+  border:1px solid $main_blue;
+  color: $main_blue;
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img{
+    margin-right: 1rem;
+  }
+  &:hover,
+  &:active,&:focus{
+    background-color: $main_blue;
+    color: $white;
+    border:1px solid $main_blue;
+  }
+}
