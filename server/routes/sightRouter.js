@@ -1,16 +1,16 @@
 const Router = require("express");
 const router = new Router();
-const  brandController=require('../controllers/brandController')
+const  sightController=require('../controllers/sightController')
 
 const checkRole=require('../middleware/checkRoleMiddleware')
 const authMiddleware=require('../middleware/authMiddleware')
 //роутер
 
-router.post("/",authMiddleware,checkRole('ADMIN'),brandController.create);
-router.get("/",brandController.create);
-router.get("/:id",brandController.getAll);
-router.put("/:id",authMiddleware,checkRole('ADMIN'),brandController.getAll);
-router.delete("/:id",authMiddleware,checkRole('ADMIN'),brandController.getAll);
-router.get("/city/:id",brandController.getAll);
+router.post("/",authMiddleware,checkRole('ADMIN'),sightController.createOne);
+router.get("/",sightController.getAll);
+router.get("/:id",sightController.getOne);
+router.put("/:id",authMiddleware,checkRole('ADMIN'),sightController.put);
+router.delete("/:id",authMiddleware,checkRole('ADMIN'),sightController.delete);
+router.get("/city/:id",sightController.getCity);
 
 module.exports = router;

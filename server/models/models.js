@@ -139,25 +139,37 @@ Rating.belongsTo(User);
 Rating.hasMany(Like);
 Like.belongsTo(Rating);
 
-Sight.hasMany(Rating);
+Sight.hasMany(Rating,{ as: "rating" });
 Rating.belongsTo(Sight);
 
 
-Sight.hasMany(Photo);
+Sight.hasMany(Photo,{ as: "photo" });
 Photo.belongsTo(Sight);
 
 
-City.hasMany(Sight);
+City.hasMany(Sight,{ as: "sight" });
 Sight.belongsTo(City);
 
 
-Country.hasMany(City);
+Country.hasMany(City,{ as: "city" });
 City.belongsTo(Country);
+
+
 
 Travel.belongsToMany(Sight, { through: TravelSight });
 Sight.belongsToMany(Travel, { through: TravelSight });
 
+Country.hasMany(Photo,{ as: "photo" });
+Photo.belongsTo(Country);
 
+City.hasMany(Photo,{ as: "photo" });
+Photo.belongsTo(City);
+
+Country.hasMany(Rating,{ as: "rating" });
+Rating.belongsTo(Country);
+
+City.hasMany(Rating,{ as: "rating" });
+Rating.belongsTo(City);
 
 module.exports = {
   Basket,

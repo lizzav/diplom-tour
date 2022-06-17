@@ -1,12 +1,12 @@
 const Router = require("express");
 const router = new Router();
-const  brandController=require('../controllers/brandController')
+const  travelController=require('../controllers/travelController')
 const authMiddleware=require('../middleware/authMiddleware')
 //роутер
-router.post("/",authMiddleware,brandController.create);
-router.get("/",authMiddleware,brandController.getAll);
-router.delete("/:id",authMiddleware,brandController.getAll);
-router.put("/:id",authMiddleware,brandController.getAll);
-router.get("/:id",authMiddleware,brandController.getAll);
+router.post("/",authMiddleware,travelController.createOne);
+router.get("/",authMiddleware,travelController.getAll);
+router.delete("/:id",authMiddleware,travelController.delete);
+router.put("/:id",authMiddleware,travelController.put);
+router.get("/:id",authMiddleware,travelController.getOne);
 ///добавить проверку на совподение id
 module.exports = router;
