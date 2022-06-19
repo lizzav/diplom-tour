@@ -101,9 +101,6 @@ const Like = sequelize.define("like", {
 User.hasOne(Basket);
 Basket.belongsTo(User);
 
-User.hasMany(Rating);
-Rating.belongsTo(User);
-
 Basket.hasMany(BasketDevice);
 BasketDevice.belongsTo(Basket);
 
@@ -113,8 +110,8 @@ Device.belongsTo(Type);
 Brand.hasMany(Device);
 Device.belongsTo(Brand);
 
-Device.hasMany(Rating);
-Rating.belongsTo(Device);
+// Device.hasMany(Rating);
+// Rating.belongsTo(Device);
 
 Device.hasMany(BasketDevice);
 BasketDevice.belongsTo(Device);
@@ -136,40 +133,36 @@ Like.belongsTo(User);
 User.hasMany(Rating);
 Rating.belongsTo(User);
 
-Rating.hasMany(Like);
+Rating.hasMany(Like,{ as: "like", onDelete: 'cascade',
+  hooks: true });
 Like.belongsTo(Rating);
 
-Sight.hasMany(Rating,{ as: "rating" });
+Sight.hasMany(Rating,{ as: "rating", onDelete: 'cascade',
+  hooks: true });
 Rating.belongsTo(Sight);
 
 
-Sight.hasMany(Photo,{ as: "photo" });
+Sight.hasMany(Photo,{ as: "photo", onDelete: 'cascade',
+  hooks: true });
 Photo.belongsTo(Sight);
 
 
-City.hasMany(Sight,{ as: "sight" });
+City.hasMany(Sight,{ as: "sight", onDelete: 'cascade',
+  hooks: true });
 Sight.belongsTo(City);
 
 
-Country.hasMany(City,{ as: "city" });
+Country.hasMany(City,{ as: "city", onDelete: 'cascade',
+  hooks: true });
 City.belongsTo(Country);
 
+Travel.hasMany(TravelSight,{ as: "TravelSight" , onDelete: 'cascade',
+  hooks: true});
+TravelSight.belongsTo(Travel);
 
-
-Travel.belongsToMany(Sight, { through: TravelSight });
-Sight.belongsToMany(Travel, { through: TravelSight });
-
-Country.hasMany(Photo,{ as: "photo" });
-Photo.belongsTo(Country);
-
-City.hasMany(Photo,{ as: "photo" });
-Photo.belongsTo(City);
-
-Country.hasMany(Rating,{ as: "rating" });
-Rating.belongsTo(Country);
-
-City.hasMany(Rating,{ as: "rating" });
-Rating.belongsTo(City);
+Sight.hasMany(TravelSight,{ onDelete: 'cascade',
+  hooks: true});
+TravelSight.belongsTo(Sight);
 
 module.exports = {
   Basket,

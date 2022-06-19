@@ -1,10 +1,6 @@
 const ApiError = require("../error/ApiError");
 const { Country, City, Sight, Photo, Rating } = require("../models/models");
-function runAsyncWrapper(callback) {
-  return function(req, res, next) {
-    callback(req, res, next).catch(next);
-  };
-}
+
 class CountryController {
   async createOne(req, res, next) {
     const { name, description, lat, lng } = req.body;
@@ -21,43 +17,77 @@ class CountryController {
   async getAll(req, res, next) {
     const country = await Country.findAll({
       include: [
-        { model: City, as: "city" },
-        { model: Photo, as: "photo" },
-        { model: Rating, as: "rating" }
+        {
+          model: City,
+          as: "city",
+          include: [
+            {
+              model: Sight,
+              as: "sight",
+              include: [
+                { model: Rating, as: "rating" },
+                { model: Photo, as: "photo" }
+              ]
+            }
+          ]
+        }
       ]
     });
 
-    return res.json(
-      country.map(el => {
-        return {
-          id: el.id,
-          name: el.name,
-          lat: el.lat,
-          lng: el.lng,
-          photo: el.photo?.[0] ?? "",
-          city: el.city,
-          rating: el.rating
-        };
-      })
-    );
+    return res.json(country);
   }
   async delete(req, res, next) {
-    return "";
+    try {
+      const { id } = req.params;
+      await Country.destroy({
+        where: { id }
+      });
+      return res.status(200).json({
+        message: "Данные удалены."
+      });
+    } catch (e) {
+      return next(ApiError.internal("Возникла непредвиденная ошибка"));
+    }
   }
   async put(req, res, next) {
-    return "";
+    const { id } = req.params;
+    const { name, description, lat, lng } = req.body;
+    if (!id || !name || !lat || !lng) {
+      return next(ApiError.badRequest("Не заполнены обязательные поля"));
+    }
+    const country = await Country.update(
+      { id, name, description, lat, lng },
+      {
+        where: { id }
+      }
+    );
+    if (!country) {
+      return next(ApiError.internal("Возникла непредвиденная ошибка"));
+    }
+    return res.json(country);
   }
   async getOne(req, res, next) {
     let { id } = req.params;
     const country = await Country.findOne({
       where: { id },
       include: [
-        { model: City, as: "city" },
-        { model: Photo, as: "photo" },
-        { model: Rating, as: "rating" }
+        {
+          model: City,
+          as: "city",
+          include: [
+            {
+              model: Sight,
+              as: "sight",
+              include: [
+                { model: Rating, as: "rating" },
+                { model: Photo, as: "photo" }
+              ]
+            }
+          ]
+        }
       ]
     });
-    if(!country){
+    if (!country) {
       return next(ApiError.internal("Запрашиваемый ресурс не найден"));
     }
     return res.json(country);

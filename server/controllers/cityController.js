@@ -1,14 +1,19 @@
-const {Country, City, Sight, Photo}=require("../models/models")
+const { Country, City, Sight, Photo, Rating } = require("../models/models");
 
 const ApiError = require("../error/ApiError");
-
 class CityController {
   async createOne(req, res, next) {
-    const {name,description,lat,lng,countryId}=req.body
-    if (!name || !lat||!lng||!countryId) {
+    const { name, description, lat, lng, countryId } = req.body;
+    if (!name || !lat || !lng || !countryId) {
       return next(ApiError.badRequest("Не заполнены обязательные поля"));
     }
-    const city = await City.create({ name, description, lat, lng,countryId });
+    const country = await Country.findOne({
+      where: { id: countryId }
+    });
+    if (!country) {
+      return next(ApiError.badRequest("Указанной страны не существует"));
+    }
+    const city = await City.create({ name, description, lat, lng, countryId });
     if (!city) {
       return next(ApiError.internal("Возникла непредвиденная ошибка"));
     }
@@ -16,23 +21,91 @@ class CityController {
   }
 
   async getAll(req, res, next) {
-    return ''
+    const city = await City.findAll({
+      include: [
+        {
+          model: Sight,
+          as: "sight",
+          include: [
+            { model: Rating, as: "rating" },
+            { model: Photo, as: "photo" }
+          ]
+        }
+      ]
+    });
+
+    return res.json(city);
   }
   async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+      await City.destroy({
+        where: { id }
+      });
 
-    return '';
+      return res.status(200).json({
+        message: "Данные удалены."
+      });
+    } catch (e) {
+      return next(ApiError.internal("Возникла непредвиденная ошибка"));
+    }
   }
   async put(req, res, next) {
-
-    return '';
+    const { id } = req.params;
+    const { name, description, lat, lng, countryId } = req.body;
+    if (!id || !name || !lat || !lng || !countryId) {
+      return next(ApiError.badRequest("Не заполнены обязательные поля"));
+    }
+    const city = await City.update(
+      { id, name, description, lat, lng, countryId },
+      {
+        where: { id }
+      }
+    );
+    if (!city) {
+      return next(ApiError.internal("Возникла непредвиденная ошибка"));
+    }
+    return res.json(city);
   }
   async getOne(req, res, next) {
-
-    return '';
+    let { id } = req.params;
+    const city = await City.findOne({
+      where: { id },
+      include: [
+        {
+          model: Sight,
+          as: "sight",
+          include: [
+            { model: Rating, as: "rating" },
+            { model: Photo, as: "photo" }
+          ]
+        }
+      ]
+    });
+    if (!city) {
+      return next(ApiError.internal("Запрашиваемый ресурс не найден"));
+    }
+    return res.json(city);
   }
   async getCountry(req, res, next) {
-
-    return '';
+    let { id } = req.params;
+    const city = await City.findOne({
+      where: { countryId: id },
+      include: [
+        {
+          model: Sight,
+          as: "sight",
+          include: [
+            { model: Rating, as: "rating" },
+            { model: Photo, as: "photo" }
+          ]
+        }
+      ]
+    });
+    if (!city) {
+      return next(ApiError.internal("Запрашиваемый ресурс не найден"));
+    }
+    return res.json(city);
   }
 }
 module.exports = new CityController();
