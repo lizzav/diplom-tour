@@ -15,7 +15,13 @@ export default class UserStore {
   get isAuth() {
     return this._isAuth;
   }
+  //todo удалить
   get user() {
+    console.log(this._user)
+    return this._user;
+  }
+  get users() {
+    console.log(this._user)
     return this._user;
   }
 }

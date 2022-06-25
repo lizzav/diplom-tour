@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./Review.scss";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import User from "../../assets/buttons/user.SVG";
@@ -6,66 +6,45 @@ import like from "../../assets/buttons/like.SVG";
 import dislike from "../../assets/buttons/dislike.SVG";
 import star from "../../assets/buttons/star.SVG";
 import { Button } from "react-bootstrap";
-const Review = () => {
+import {fetchSight} from "../../http/sightAPI";
+import OneReview from "./OneReview";
+const Review = ({ratings}) => {
   const navigate = useNavigate();
-  const revew = [
-    {
-      id: 1,
-      user: "Peter V",
-      grade: 5,
-      review:
-        "Описывать Эйфелевую башню (La Tour Eiffel)- не уважать читателя. О ней написано столько, что пожалуй и прочитать все невозможно. Только напомню, после того как башню построили, большинству парижан она не понравилась. Её даже ненавидели. Почти, точно так же, как стеклянную пирамиду над подземными этажами Лувра. Не всегда современники в состоянии оценить грандиозность постройки и ее значимость в будующем. Расскажу свои впечатления. Как технарь, считаю башню изумительным сооружением с инженерной точки зрения и дизайна. Все продуманно до мелочей. Посольство ЧР находится в двух шагах от этой башни. В здании, которое было подарено Чехословакии в 1918 году Францией.",
-      date: Date.now(),
-      like: 8,
-      dislike: 1
-    },
-    {
-      id: 2,
-      user: "Александр Бадин",
-      grade: 5,
-      review:
-        "Грандиозное строение, которое построили для индустриальный выставки всего на 4 года. Но она так и осталась и стала символом Парижа и самой главной достопримечательностью. Пытались заранее онлайн купить билеты для посещения башни, но тщетно. Турагенства выкупают топовое время ещё до начала продаж. Но попасть на башню без проблем, купив билеты на месте. У каждой ноги башни есть кассы. Смотрите на символы, есть символ лифта, на нём вы сможете подняться до 2 уровня а там выстояв ещё одну очередь подняться на верхний уровень. Есть символ человека идущего по ступеням. В этих кассах вы купите билет и пешком можете подняться до второго уровня, а там также на лифте до верхнего. Очередь внизу у ноги башни, проходит минут за 40 - 60. Можно сказать не заметно. Пешком дешевле примерно на 5 €, чем на лифте.",
-      date: Date.now(),
-      like: 6,
-      dislike: 3
-    },
-    {
-      id: 3,
-      user: "GeronimO",
-      grade: 4.5,
-      review:
-        'Как известно, единственное место в Париже где-бы не была видна башня - это сама башня) Я был на всех её этажах. Третий (самый верхний) только для фотографий, но только в хорошую погоду. Когда бывает низкая облачность видимость наверху откровенно плохая. И ещё когда бывает ветерок небольшой на земле - верхушку прилично раскачивает. На первой этаже откровенно делать нечего. Так что лучший вариант это второй этаж. Тут и кафе и сувенирные магазинчики, да собственно вся тусовка здесь и происходит) Первый раз был в Париже в 2000 году. Турагенство сразу предлагало (как бонус) билет на башню заранее. Прилетел-приехал к башне и сразу минуя огромную очередь (за билетами) идёшь на лифт. Последний раз был в мае 2019 уже такой "опции" не было...а очередь стала ещё больше. Было 10 утра отличного майского дня, можно было постоять, но внук посмотрел и сказал....нее дед, это не дала - поехали в Диснейлэнд сразу. Ну мы так и сделали)',
-      date: Date.now(),
-      like: 1,
-      dislike: 0
-    },
-  ];
+
   return (
     <div className={"review"}>
-      {revew.map(el => (
-        <div className={"review__item"}>
-          <div className={"review__header"}>
-            <div className={"review__info"}>
-              <img className={"img-icon user-icon"} src={User} />
-              <div>
-                <h6>{el.user}</h6>
-                <p>{el.date}</p>
-              </div>
-            </div>
-            <p className={"review__grade"}>
-              {el.grade}
-              <img className={"img-icon"} src={star} />
-            </p>
-          </div>
-          <p>{el.review}</p>
-          <div className={"review__footer"}>
-            <img className={"img-icon"} src={like} />
-            {el.like}
-            <img className={"img-icon"} src={dislike} />
-            {el.dislike}
-          </div>
-        </div>
-      ))}
+      {ratings?.length?
+      ratings.map(el => (
+        <OneReview rating={el}/>
+        // <div className={"review__item"}>
+        //   <div className={"review__header"}>
+        //     <div className={"review__info"}>
+        //       <img className={"img-icon user-icon"} src={User} />
+        //       <div>
+        //         <h6>{el.user.name??el.user.email}</h6>
+        //         <p>{el.createdAt}</p>
+        //       </div>
+        //     </div>
+        //     <p className={"review__grade"}>
+        //       {el.grade}
+        //       <img className={"img-icon"} src={star} />
+        //     </p>
+        //   </div>
+        //   <p>{el.review}</p>
+        //   <div className={"review__footer"}>
+        //     <img className={"img-icon"} src={like} />
+        //     {
+        //       el.like.filter(el=>el.like===true).length
+        //     }
+        //     <img className={"img-icon"} src={dislike} />
+        //     {
+        //       el.like.filter(el=>el.like===false).length
+        //     }
+        //   </div>
+        // </div>
+      ))
+        :<span>нет отзывов</span>
+      }
       <Button className={"blue-button"}>Оставить отзыв</Button>
     </div>
   );

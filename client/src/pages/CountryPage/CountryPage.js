@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import "./SightPage.scss";
+import "./CountryPage.scss";
 import { Button, Carousel, Modal } from "react-bootstrap";
 import Maps from "../../components/Maps";
 import {useNavigate, useParams} from "react-router-dom";
@@ -7,8 +7,9 @@ import star from "../../assets/buttons/star.SVG";
 import Review from "../../components/Review";
 import {Context} from "../../index";
 import {fetchOneSight, fetchSight} from "../../http/sightAPI";
+import {fetchOneCountry} from "../../http/countryesAPI";
 import {observer} from "mobx-react-lite";
-const SightPage =observer( () => {
+const CountryPage = observer(() => {
   const [visible, setVisible] = useState(false);
 
   const  [sight, setSight]=useState({})
@@ -16,7 +17,7 @@ const SightPage =observer( () => {
 
   const {id}=useParams()
   useEffect(()=>{
-    fetchOneSight(id).then(data=>{
+    fetchOneCountry(id).then(data=>{
       setSight(data);
       console.log(data.rating)
 
@@ -52,15 +53,10 @@ const SightPage =observer( () => {
       </Carousel>
       <h2>Описание</h2>
       <p>{sight.description}</p>
-      <h2>Адрес</h2>
-      <p>{sight.address}</p>
       {sight.lng&& sight.lat&&<Maps direction={false} markers={[sight]} />}
-      <h2>Отзывы</h2>
-
-      <Review ratings={sight.rating?sight.rating:[]}/>
       <p className={"main__error"}>Не нашли что искали?/Нашли ошибку?</p>
     </div>
   );
 });
 
-export default SightPage;
+export default CountryPage;

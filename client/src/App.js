@@ -2,7 +2,7 @@ import "./App.scss";
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./components/AppRouter";
 // import TravelsPage from "./components/TravelsPage";
-// import NavBar from "./components/NavBar/index";
+import NavBar from "./components/NavBar/index";
 import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Context } from "./index";
@@ -10,7 +10,7 @@ import { check } from "./http/userAPI";
 // import data from "bootstrap/js/src/dom/data";
 import { Spinner } from "react-bootstrap";
 import Header from "./components/Header";
-import NavBar from "./components/NavBar";
+// import NavBar from "./components/NavBar";
 
 const App = observer(() => {
   const { user } = useContext(Context);
@@ -18,7 +18,8 @@ const App = observer(() => {
   useEffect(() => {
     check()
       .then(data => {
-        user.setUser(true);
+        console.log(data)
+        user.setUser(data);
         user.setIsAuth(true);
       })
       .finally(() => {
@@ -31,13 +32,13 @@ const App = observer(() => {
   return (
     <BrowserRouter>
       {/*<NavBar/>*/}
-      {/*<Header/>*/}
-      {/*<div className={'main-grid'}>*/}
+      <Header/>
+      <div className={'main-grid'}>
       <NavBar/>
-        {/*<main className="main">*/}
+        <main className="main">
           <AppRouter/>
-        {/*</main>*/}
-    {/*</div>*/}
+        </main>
+    </div>
     </BrowserRouter>
   );
 });

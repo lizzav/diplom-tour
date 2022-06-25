@@ -1,6 +1,18 @@
 const ApiError = require("../error/ApiError");
 const { Country, City, Sight, Photo, Rating } = require("../models/models");
-
+const prerere=(country)=>{
+  const {id, name,description,lat, lng,  city}=country;
+  const photo=[]
+  const rating=[]
+  city.forEach(el=>{
+    const {sight}=el
+    sight.forEach(e=>{
+      photo.push(...e.photo)
+      rating.push(...e.rating)
+    })
+  })
+  return {id, name, description,lat, lng, photo,rating}
+}
 class CountryController {
   async createOne(req, res, next) {
     const { name, description, lat, lng } = req.body;
@@ -34,7 +46,7 @@ class CountryController {
       ]
     });
 
-    return res.json(country);
+    return res.json(country.map(el=>prerere(el)));
   }
   async delete(req, res, next) {
     try {
@@ -90,7 +102,7 @@ class CountryController {
     if (!country) {
       return next(ApiError.internal("Запрашиваемый ресурс не найден"));
     }
-    return res.json(country);
+    return res.json(prerere(country));
   }
 }
 module.exports = new CountryController();

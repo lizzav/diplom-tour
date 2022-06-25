@@ -1,5 +1,5 @@
 const ApiError = require("../error/ApiError");
-const { City, Sight, Photo, Rating } = require("../models/models");
+const { City, Sight, Photo, Rating, User,Like } = require("../models/models");
 const uuid = require("uuid");
 const path = require("path");
 
@@ -72,7 +72,10 @@ class SightController {
       where: { id },
       include: [
         { model: Photo, as: "photo" },
-        { model: Rating, as: "rating" }
+        { model: Rating, as: "rating", include: [
+            { model: User, as: "user" },
+            {model: Like, as:'like'}
+          ] }
       ]
     });
     if (!sight) {

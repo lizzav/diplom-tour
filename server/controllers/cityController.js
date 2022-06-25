@@ -1,5 +1,16 @@
 const { Country, City, Sight, Photo, Rating } = require("../models/models");
 
+const prerere=(city)=>{
+  const {id, name,description,lat, lng,sight}=city;
+  const photo=[]
+  const rating=[]
+    sight.forEach(e=>{
+      photo.push(...e.photo)
+      rating.push(...e.rating)
+    })
+  return {id, name, description,lat, lng, photo,rating}
+}
+
 const ApiError = require("../error/ApiError");
 class CityController {
   async createOne(req, res, next) {
@@ -34,7 +45,7 @@ class CityController {
       ]
     });
 
-    return res.json(city);
+    return res.json(city.map(el=>prerere(el)));
   }
   async delete(req, res, next) {
     try {
@@ -85,7 +96,7 @@ class CityController {
     if (!city) {
       return next(ApiError.internal("Запрашиваемый ресурс не найден"));
     }
-    return res.json(city);
+    return res.json(prerere(city));
   }
   async getCountry(req, res, next) {
     let { id } = req.params;
@@ -105,7 +116,7 @@ class CityController {
     if (!city) {
       return next(ApiError.internal("Запрашиваемый ресурс не найден"));
     }
-    return res.json(city);
+    return res.json(city.map(el=>prerere(el)));
   }
 }
 module.exports = new CityController();
