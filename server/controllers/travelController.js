@@ -79,7 +79,7 @@ class TravelController {
     const { id } = req.params;
 
     const { sightId, travelId, visited } = req.body;
-    if (!sightId || !travelId || !visited) {
+    if (!sightId || !travelId) {
       return next(ApiError.badRequest("Не заполнены обязательные поля"));
     }
     const travel = await Travel.findOne({
@@ -97,7 +97,7 @@ class TravelController {
     const travelSight = await TravelSight.update(
       {
         sightId,
-        visited,
+        visited:visited??false,
         travelId
       },
       { where: { id } }
@@ -110,12 +110,12 @@ class TravelController {
 
   async deleteSight(req, res, next) {
     const { id } = req.params;
-
-    const travelSight = await TravelSight.findOne({ where: { travelId: id } });
+    const travelSight = await TravelSight.findOne({ where: { id } });
     if (!travelSight) {
       ApiError.badRequest("Несущевствует указанной записи");
     }
-    const travel = await Travel.findOne({ where: { id, userId: req.user.id } });
+   const  {travelId}=travelSight
+    const travel = await Travel.findOne({ where: {id:travelId, userId: req.user.id } });
     if (!travelSight && !travel) {
       return next(ApiError.forbidden("Нет доступа"));
     }

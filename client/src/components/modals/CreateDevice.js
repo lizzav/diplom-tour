@@ -34,7 +34,6 @@ const CreateDevice = ({ show, onHide }) => {
     formData.append("brandId", device.selectedBrand.id);
     formData.append("typeId", device.selectedTypes.id);
     formData.append("info", JSON.stringify(info));
-    console.log(info);
     createDevice(formData).then(data=>onHide());
   };
   return (

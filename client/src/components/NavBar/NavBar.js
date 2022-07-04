@@ -17,7 +17,6 @@ const NavBar =observer( () => {
   const { user } = useContext(Context);
 
   const logOut=()=>{
-    console.log(1234)
     localStorage.setItem('token','')
     user.setIsAuth(false);
     user.setUser({})
@@ -29,7 +28,7 @@ const NavBar =observer( () => {
         <img className={"img-icon"} src={Home} />
         Главная
       </NavLink>
-      {user.users && (
+      {user.isAuth && (
         <NavLink className={"menu__item"} to={"/travels"}>
           <img className={"img-icon"} src={star} />
           Поездки

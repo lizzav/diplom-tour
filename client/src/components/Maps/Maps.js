@@ -70,7 +70,6 @@ const Maps = ({ markers,direction=false }) => {
       );
     }
   };
-  console.log(direction)
   return isLoaded ? (
     <GoogleMap
       mapContainerClassName={'travel__map'}

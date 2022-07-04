@@ -16,11 +16,6 @@
   &__rating {
     display: flex;
     align-items: center;
-    gap: 1em;
-    span{
-      align-items: center;
-      display: flex;
-    }
   }
   &__img {
     width: 100%;
@@ -28,10 +23,6 @@
     object-fit: cover;
 
     filter: contrast(130%) brightness(70%);
-    &-icon{
-
-      margin: 0 1em;
-    }
   }
 
   &__item {
@@ -44,4 +35,15 @@
     -webkit-box-orient: vertical; /* Вертикальная ориентация */
     overflow: hidden;
   }
+}
+
+.city__item{
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+  display: grid;
+  grid-template-columns: max-content repeat(2, 1fr);
+  align-items: center;
+  gap:2rem;
+  //justify-content: space-between;
+  border-bottom: 1px solid $gray;
 }

@@ -10,15 +10,27 @@ import { check } from "./http/userAPI";
 // import data from "bootstrap/js/src/dom/data";
 import { Spinner } from "react-bootstrap";
 import Header from "./components/Header";
+import { fetchTravel } from "./http/travelsAPI";
+import AddReview from "./components/modals/AddReview";
+import AddError from "./components/modals/AddError";
 // import NavBar from "./components/NavBar";
 
 const App = observer(() => {
   const { user } = useContext(Context);
   const [loading, setLoading] = useState(true);
+
+  const [visible, setVisible] = useState(false);
+
+  const { travel } = useContext(Context);
+  useEffect(() => {
+    fetchTravel().then(data => {
+      travel.setTravels(data);
+    });
+  }, []);
+
   useEffect(() => {
     check()
       .then(data => {
-        console.log(data)
         user.setUser(data);
         user.setIsAuth(true);
       })
@@ -32,13 +44,23 @@ const App = observer(() => {
   return (
     <BrowserRouter>
       {/*<NavBar/>*/}
-      <Header/>
-      <div className={'main-grid'}>
-      <NavBar/>
+      <Header />
+      <div className={"main-grid"}>
+        <NavBar />
         <main className="main">
-          <AppRouter/>
+          <div className={"page"}>
+            <AppRouter />
+            <p className={"main__error"} onClick={()=>setVisible(true)}>Не нашли что искали?/Нашли ошибку?</p>
+          </div>
         </main>
-    </div>
+      </div>
+
+      <AddError
+        show={visible}
+        onHide={() => {
+          setVisible(false);
+        }}
+      />
     </BrowserRouter>
   );
 });

@@ -40,11 +40,11 @@ class ErrorController {
   async put(req, res, next) {
     const { id } = req.params;
     const { name, description, email, verified } = req.body;
-    if (!id || !name || !email || !verified) {
+    if (!id || !name || !email) {
       return next(ApiError.badRequest("Не заполнены обязательные поля"));
     }
     const error = await Error.update(
-      { id, name, description, email, verified },
+      { id, name, description, email,verified:verified??false },
       {
         where: { id }
       }

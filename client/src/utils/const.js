@@ -8,6 +8,7 @@ export const MAIN_ROUTE = "/";
 export const TRAVEL_ROUTE = "/travels";
 export const SIGHTS_ROUTE = "/sights";
 export const COUNTRIES_ROUTE = "/countries";
-export const SITES_ROUTE = "/cites";
+export const CITES_ROUTE = "/cites";
+export const ERROR_ROUTE = "/errors";
 export const SETTINGS_ROUTE = "/settings";
 

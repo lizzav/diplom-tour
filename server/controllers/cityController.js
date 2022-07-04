@@ -8,7 +8,7 @@ const prerere=(city)=>{
       photo.push(...e.photo)
       rating.push(...e.rating)
     })
-  return {id, name, description,lat, lng, photo,rating}
+  return {id, name, description,lat, lng, photo,rating, sight}
 }
 
 const ApiError = require("../error/ApiError");

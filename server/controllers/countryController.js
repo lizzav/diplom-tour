@@ -4,14 +4,17 @@ const prerere=(country)=>{
   const {id, name,description,lat, lng,  city}=country;
   const photo=[]
   const rating=[]
-  city.forEach(el=>{
+  const newCity=city.map(el=>{
+    const photoCity=[]
     const {sight}=el
     sight.forEach(e=>{
       photo.push(...e.photo)
+      photoCity.push(...e.photo)
       rating.push(...e.rating)
     })
+    return {id:el.id, name:el.name, description:el.description, photo:photoCity}
   })
-  return {id, name, description,lat, lng, photo,rating}
+  return {id, name, description,lat, lng, photo,rating, city:newCity}
 }
 class CountryController {
   async createOne(req, res, next) {

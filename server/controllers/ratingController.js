@@ -130,7 +130,7 @@ class RatingController {
     }
 
     const oldLikes = await Like.findOne({
-      where: { userId: req.user.id }
+      where: { userId: req.user.id, ratingId:id }
     });
     if (oldLikes) {
       return next(ApiError.badRequest("Оценка уже сущевствует"));

@@ -17,11 +17,9 @@ export default class UserStore {
   }
   //todo удалить
   get user() {
-    console.log(this._user)
     return this._user;
   }
   get users() {
-    console.log(this._user)
     return this._user;
   }
 }
